@@ -36,16 +36,13 @@ def create_table_of_contents(csv_data):
         text_file.write("Table of Contents \n")
         text_file.write("\n")
         for i in csv_data:
-            if i["Issue Type"] != "Epic":
-                # if i["Issue key"] in inclusion_list:
-            # if i["Issue Type"] != "Epic" and i["Issue key"]:
+            if i["Issue Type"] != "Epic" and i["Issue key"] in inclusion_list:
                 table_of_contents[i["Issue key"]] = i["Summary"]
         for key, value in table_of_contents.items():
             text_file.write(key + "\n")
             text_file.write(value + "\n")
             text_file.write("\n")
             document.add_paragraph(key + " : " + value, style='Intense Quote')
-            # document.add_paragraph(value, style='Intense Quote')
 
         document.save('table_of_contents.docx')
     except Exception as e:
@@ -63,32 +60,23 @@ def create_document(csv_data):
         document.add_heading('Gaps Items', 0)
 
         for i in csv_data:
-            for k, v in i.items():
-                # if k in ("Issue key", "Summary", "Issue Type", "Description", "Outward issue link (Blocks)",
-                #          "Outward issue link (Cloners)", "Outward issue link (Relates)",
-                #          "Custom field (Story point estimate)", "Parent summary", ):
-                if k in ("Issue key", "Summary", "Description"):
-                    if v != "Epic":
-                        # if v in inclusion_list:
+            if i["Issue key"] in inclusion_list:
+                for k, v in i.items():
+                    if k in ("Issue key", "Summary", "Description") and v != "Epic":
                         row_data[k] = check_string(v)
-            create_text_file(row_data, text_file, document)
+                create_text_file(row_data, text_file, document)
     except Exception as e:
         logging.error(str(e))
 
 
 def create_text_file(row_data, text_object, doc_obj):
-    # print(row_data)
-    # {'Summary': 'Versioning for Admin View', 'Issue key': 'GAPS-1', 'Description': 'N/a'}
-    try:
-        doc_obj.add_paragraph(row_data["Issue key"] + ": " + row_data["Summary"], style='Normal')
-        doc_obj.add_paragraph(row_data["Description"], style='Normal')
-        # for key, value in row_data.items():
-        #     text_object.write(key + "\n")
-        #     text_object.write(value + "\n")
-        #     text_object.write("\n")
-        #     doc_obj.add_paragraph(value, style='Normal')
-            # doc_obj.add_paragraph(value, style='Normal')
 
+    try:
+        doc_obj.add_paragraph(row_data["Issue key"] + ": " + row_data["Summary"], style='Heading 3')
+        doc_obj.add_paragraph(row_data["Description"], style='Normal')
+        text_object.write(row_data["Issue key"] + ": " + row_data["Summary"] + "\n")
+        text_object.write(row_data["Description"] + "\n")
+        text_object.write("\n")
         doc_obj.save('Gaps_Items.docx')
     except Exception as e:
         logging.error(str(e))
