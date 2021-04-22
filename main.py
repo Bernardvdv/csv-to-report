@@ -62,7 +62,7 @@ def create_document(csv_data):
         for i in csv_data:
             if i["Issue key"] in inclusion_list:
                 for k, v in i.items():
-                    if k in ("Issue key", "Summary", "Description") and v != "Epic":
+                    if k in ("Issue key", "Summary", "Description", "Parent summary") and v != "Epic":
                         row_data[k] = check_string(v)
                 create_text_file(row_data, text_file, document)
     except Exception as e:
@@ -72,8 +72,8 @@ def create_document(csv_data):
 def create_text_file(row_data, text_object, doc_obj):
 
     try:
-        doc_obj.add_paragraph(row_data["Issue key"] + ": " + row_data["Summary"], style='Heading 3')
-        doc_obj.add_paragraph(row_data["Description"], style='Normal')
+        doc_obj.add_paragraph(row_data["Issue key"] + ": " + row_data["Summary"], style="Heading 3")
+        doc_obj.add_paragraph(row_data["Description"], style='Body Text')
         text_object.write(row_data["Issue key"] + ": " + row_data["Summary"] + "\n")
         text_object.write(row_data["Description"] + "\n")
         text_object.write("\n")
