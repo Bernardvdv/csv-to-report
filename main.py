@@ -1,4 +1,4 @@
-import sys, logging
+import sys, logging, time, re
 from datetime import datetime
 
 from docx import Document
@@ -24,6 +24,10 @@ inclusion_list = ["GAPS-17", "GAPS-20", "GAPS-89", "GAPS-88", "GAPS-93", "GAPS-2
                   "GAPS-59", "GAPS-60", "GAPS-61", "GAPS-62", "GAPS-63", "GAPS-64", "GAPS-66", "GAPS-67", "GAPS-68",
                   "GAPS-69", "GAPS-70", "GAPS-71", "GAPS-72", "GAPS-73", "GAPS-74", "GAPS-79", "GAPS-80", "GAPS-81",
                   "GAPS-82", "GAPS-31", "GAPS-33", "GAPS-34", "GAPS-45", "GAPS-46"]
+
+# Rules taken from: https://jira.atlassian.com/secure/WikiRendererHelpAction.jspa?section=all
+bold_rule = re.compile('(\*.*?\*)')
+heading_rule = re.compile('(h[1-6].*)')
 
 
 def create_table_of_contents(csv_data):
@@ -69,14 +73,14 @@ def create_document(csv_data):
         logging.error(str(e))
 
 
-def create_text_file(row_data, text_object, doc_obj):
+def create_text_file(row_data, text_obj, doc_obj):
 
     try:
         doc_obj.add_paragraph(row_data["Issue key"] + ": " + row_data["Summary"], style="Heading 3")
-        doc_obj.add_paragraph(row_data["Description"], style='Body Text')
-        text_object.write(row_data["Issue key"] + ": " + row_data["Summary"] + "\n")
-        text_object.write(row_data["Description"] + "\n")
-        text_object.write("\n")
+        doc_obj.add_paragraph(replace_bold(replace_heading(row_data["Description"])), style='Body Text')
+        text_obj.write(row_data["Issue key"] + ": " + row_data["Summary"] + "\n")
+        text_obj.write(row_data["Description"] + "\n")
+        text_obj.write("\n")
         doc_obj.save('Gaps_Items.docx')
     except Exception as e:
         logging.error(str(e))
@@ -88,6 +92,23 @@ def check_string(value):
     else:
         return value
 
+
+def replace_bold(source):
+    # Characters wrapped in *strong*
+    for match in bold_rule.findall(source):
+        cleaned_string = match.replace("*", "")
+        # TODO: Write change to file
+        source = source.replace(match, cleaned_string)
+    return source
+
+def replace_heading(source):
+    # Words starting with: "h1.", "h2.", "h3.", "h4.", "h5." or "h6."
+    for match in heading_rule.findall(source):
+        heading_number = match[1]
+        cleaned_string = match.replace(f"h{heading_number}. ", "")
+        source = source.replace(match, cleaned_string)
+        # TODO: Write change to file
+    return source
 
 if __name__ == "__main__":
     csv_data = csv_import_class.read_csv("gaps.csv")
