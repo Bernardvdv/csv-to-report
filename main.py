@@ -79,7 +79,6 @@ def create_document(csv_data):
 def create_text_file(row_data, text_object, doc_obj):
     # print(row_data)
     # {'Summary': 'Versioning for Admin View', 'Issue key': 'GAPS-1', 'Description': 'N/a'}
-    print(text_object)
     try:
         doc_obj.add_paragraph(row_data["Issue key"] + ": " + row_data["Summary"], style='Normal')
         doc_obj.add_paragraph(row_data["Description"], style='Normal')
