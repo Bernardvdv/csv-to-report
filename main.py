@@ -1,6 +1,7 @@
 import sys, logging, time, re, io
 from datetime import datetime
 
+from docx import Document
 from htmldocx import HtmlToDocx
 
 import class_read_csv
@@ -54,7 +55,16 @@ def create_document(csv_data):
                         row_data["Summary"] = check_string(i["Summary"])
                         row_data["Description"] = check_string(i["Description"])
 
-                create_text_file(row_data, html_file)
+                # create_text_file(row_data, html_file)
+                html_file.write(f"<h3> {row_data['Issue key']} : {row_data['Summary']} </h3>\n")
+                line = row_data['Description']
+                line = replace_ordered_list(line)
+                line = replace_unordered_list(line)
+                line += replace_image(line)
+                line += replace_bold(line)
+                line += replace_heading(line)
+                html_file.write(f"<p>{line}</p>\n")
+
         html_file.write("</body>\n")
         html_file.write("</html>\n")
 
@@ -62,23 +72,6 @@ def create_document(csv_data):
         new_parser = HtmlToDocx()
         new_parser.parse_html_file("demofile.html", "gaps_items_html_converted")
 
-    except Exception as e:
-        logging.error(str(e))
-
-
-def create_text_file(row_data, html_file):
-
-    try:
-        html_file.write(f"<h3> {row_data['Issue key']} : {row_data['Summary']} </h3>\n")
-        # for line in io.StringIO(row_data["Description"]):
-        lines = row_data['Description']
-        lines += replace_ordered_list(row_data['Description'])
-        lines += replace_unordered_list(lines)
-        lines += replace_image(lines)
-        lines += replace_bold(lines)
-        lines += replace_heading(lines)
-
-        html_file.write(f"{lines}\n")
     except Exception as e:
         logging.error(str(e))
 
