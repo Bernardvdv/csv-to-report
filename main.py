@@ -82,8 +82,8 @@ def create_text_file(row_data, text_obj, doc_obj, html_file):
         # doc_obj.save('Gaps_items.docx')
 
         html_file.write(f"<h3> {row_data['Issue key']} : {row_data['Summary']} </h3>\n")
-        for line in io.StringIO(row_data["Description"]):
-            html_file.write(f"{replace_ordered_list(replace_unordered_list(replace_image(replace_bold(replace_heading(line)))))}\n")
+        # for line in io.StringIO(row_data["Description"]):
+        html_file.write(f"{replace_ordered_list(replace_unordered_list(replace_image(replace_bold(replace_heading(row_data['Description'])))))}\n")
     except Exception as e:
         logging.error(str(e))
 
@@ -101,16 +101,16 @@ def replace_image(source):
     else:
         return source
 
+
 def _enclosed_tag(tag, string):
         return f"<{tag}>{string}</{tag}>\n"
+
 
 def proccess_bullets(line, bullet_state, list_tag_type="ul"):
     line_replacement = ""
 
     def _open_tag(tag):
         return f"<{tag}>\n"
-
-
 
     def _close_tag(tag):
         return f"</{tag}>\n"
