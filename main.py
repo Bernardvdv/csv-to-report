@@ -55,7 +55,6 @@ def create_document(csv_data):
                         row_data["Summary"] = check_string(i["Summary"])
                         row_data["Description"] = check_string(i["Description"])
 
-                # create_text_file(row_data, html_file)
                 html_file.write(f"<h3> {row_data['Issue key']} : {row_data['Summary']} </h3>\n")
                 line = row_data['Description']
                 line = replace_ordered_list(line)
