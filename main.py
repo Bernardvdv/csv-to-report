@@ -60,9 +60,9 @@ def create_document(csv_data):
                 line = row_data['Description']
                 line = replace_ordered_list(line)
                 line = replace_unordered_list(line)
-                line += replace_image(line)
-                line += replace_bold(line)
-                line += replace_heading(line)
+                line = replace_image(line)
+                line = replace_bold(line)
+                line = replace_heading(line)
                 html_file.write(f"<p>{line}</p>\n")
 
         html_file.write("</body>\n")
