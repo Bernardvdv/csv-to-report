@@ -98,7 +98,7 @@ def replace_image(source):
 
 
 def _enclosed_tag(tag, string):
-        return f"<{tag}>{string}</{tag}>\n"
+    return f"<{tag}>{string}</{tag}>\n"
 
 
 def proccess_bullets(line, bullet_state, list_tag_type="ul"):
