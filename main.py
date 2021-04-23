@@ -83,7 +83,7 @@ def create_text_file(row_data, text_obj, doc_obj, html_file):
 
         html_file.write(f"<h3> {row_data['Issue key']} : {row_data['Summary']} </h3>\n")
         for line in io.StringIO(row_data["Description"]):
-            html_file.write(f"<p> {replace_ordered_list(replace_unordered_list(replace_image(replace_bold(replace_heading(line)))))} </p>\n")
+            html_file.write(f"{replace_ordered_list(replace_unordered_list(replace_image(replace_bold(replace_heading(line)))))}\n")
     except Exception as e:
         logging.error(str(e))
 
@@ -97,10 +97,12 @@ def check_string(value):
 
 def replace_image(source):
     if source[0] == "!":
-        return "Image"
+        return "Image Removed"
     else:
         return source
 
+def _enclosed_tag(tag, string):
+        return f"<{tag}>{string}</{tag}>\n"
 
 def proccess_bullets(line, bullet_state, list_tag_type="ul"):
     line_replacement = ""
@@ -108,8 +110,7 @@ def proccess_bullets(line, bullet_state, list_tag_type="ul"):
     def _open_tag(tag):
         return f"<{tag}>\n"
 
-    def _enclosed_tag(tag, string):
-        return f"<{tag}>{string}</{tag}>\n"
+
 
     def _close_tag(tag):
         return f"</{tag}>\n"
@@ -206,8 +207,9 @@ def replace_bold(source):
     # Characters wrapped in *strong*
     for match in bold_rule.findall(source):
         cleaned_string = match.replace("*", "")
-        # TODO: Write change to file
-        source = source.replace(match, cleaned_string)
+        tag = _enclosed_tag("b", cleaned_string)
+        source = source.replace(match, tag)
+        # source = source.replace(match, cleaned_string)
     return source
 
 
@@ -216,17 +218,9 @@ def replace_heading(source):
     for match in heading_rule.findall(source):
         heading_number = match[1]
         cleaned_string = match.replace(f"h{heading_number}. ", "")
-        source = source.replace(match, cleaned_string)
-        # TODO: Write change to file
-    return source
-
-def replace_numbered(source):
-    # Words starting with: "#"
-    for match in heading_rule.findall(source):
-        heading_number = match[1]
-        cleaned_string = match.replace(f"h{heading_number}. ", "")
-        source = source.replace(match, cleaned_string)
-        # TODO: Write change to file
+        # source = source.replace(match, cleaned_string)
+        tag = _enclosed_tag("b", cleaned_string)
+        source = source.replace(match, tag)
     return source
 
 
