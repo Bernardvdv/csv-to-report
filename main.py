@@ -42,6 +42,9 @@ def create_document(csv_data):
         html_file = open("temp.html", "w")
         html_file.write("<!DOCTYPE html>\n")
         html_file.write("<html>\n")
+        html_file.write("<head>\n")
+        html_file.write("<meta charset='utf-8'>\n")
+        html_file.write("</head>\n")
         html_file.write("<body>\n")
         row_data = {}
 
