@@ -25,7 +25,7 @@ class BulletList:
                 line_replacement += open_tag(self.wrapper_tag_type)
             # Close existing level i.e the previous indentation has ended
             elif self.last_level > self.current_level:
-                line_replacement += close_tag(self.wrapper_tag_type)
+                line_replacement += self.cleanup_tag_closure(self.last_level)
 
             cleaned_line = line[len(self.prefix):]
             line_replacement += enclosed_tag("li", cleaned_line)
