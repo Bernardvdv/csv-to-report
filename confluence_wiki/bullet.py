@@ -6,8 +6,8 @@ from utils import close_tag, enclosed_tag, open_tag
 class BulletList:
 
     def __init__(self, source):
-        self.current_level = False
-        self.last_level = False
+        self.current_level = 0
+        self.last_level = 0
         self.prefix = ""
         self.source = source
         self.wrapper_tag_type = ""
@@ -25,7 +25,8 @@ class BulletList:
                 line_replacement += open_tag(self.wrapper_tag_type)
             # Close existing level i.e the previous indentation has ended
             elif self.last_level > self.current_level:
-                line_replacement += self.cleanup_tag_closure(self.last_level)
+                level_difference = self.last_level - self.current_level
+                line_replacement += self.cleanup_tag_closure(level_difference)
 
             cleaned_line = line[len(self.prefix):]
             line_replacement += enclosed_tag("li", cleaned_line)
@@ -84,7 +85,7 @@ class OrderedBulletList(BulletList):
             return 5, "##### "
         elif line.startswith("###### "):
             return 6, "###### "
-        return False, ""
+        return 0, ""
 
 
 class UnOrderedBulletList(BulletList):
@@ -106,4 +107,4 @@ class UnOrderedBulletList(BulletList):
             return 5, "***** "
         elif line.startswith("****** "):
             return 6, "****** "
-        return False, ""
+        return 0, ""
