@@ -1,5 +1,6 @@
-from utils import close_tag, enclosed_tag, open_tag
 import io
+
+from utils import close_tag, enclosed_tag, open_tag
 
 
 class BulletList:
@@ -32,7 +33,7 @@ class BulletList:
         else:
             if self.last_level:
                 # close levels
-                self.cleanup_tag_closure(self.last_level)
+                line_replacement += self.cleanup_tag_closure(self.last_level)
 
             line_replacement += line
 
