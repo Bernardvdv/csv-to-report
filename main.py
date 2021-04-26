@@ -1,6 +1,5 @@
 import sys, logging, time, re, io
 from datetime import datetime
-
 from docx import Document
 from htmldocx import HtmlToDocx
 
@@ -40,11 +39,12 @@ heading_rule = re.compile('(h[1-6].*)')
 def create_document(csv_data):
 
     try:
-        html_file = open("demofile.html", "w")
+        html_file = open("temp.html", "w")
         html_file.write("<!DOCTYPE html>\n")
         html_file.write("<html>\n")
         html_file.write("<body>\n")
         row_data = {}
+
 
         for key, val in inclusion_list.items():
             html_file.write(f"<h1> {key} </h1>\n")
@@ -62,14 +62,14 @@ def create_document(csv_data):
                 line = replace_image(line)
                 line = replace_bold(line)
                 line = replace_heading(line)
-                html_file.write(f"<p>{line}</p>\n")
+                html_file.write(f"{line}\n")
 
         html_file.write("</body>\n")
         html_file.write("</html>\n")
 
         # Convert HTML file to docx
         new_parser = HtmlToDocx()
-        new_parser.parse_html_file("demofile.html", "gaps_items_html_converted")
+        new_parser.parse_html_file("temp.html", "gaps_items_html_converted")
 
     except Exception as e:
         logging.error(str(e))
