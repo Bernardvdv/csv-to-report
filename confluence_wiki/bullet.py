@@ -1,4 +1,5 @@
 from utils import close_tag, enclosed_tag, open_tag
+import io
 
 
 class BulletList:
