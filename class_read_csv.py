@@ -1,5 +1,4 @@
-import sys, os, csv, json
-import time
+import csv
 import logging
 from datetime import datetime
 
@@ -15,7 +14,7 @@ logging.basicConfig(
 )
 
 
-class Read_CSV_Data:
+class ReadCSVData:
     """ Read all rows from csv file and pass data back as a list"""
 
     def read_csv(self, csvfilepath):

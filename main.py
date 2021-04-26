@@ -7,7 +7,7 @@ from confluence_wiki.bullet import OrderedBulletList, UnOrderedBulletList
 from confluence_wiki.text import parse_bold, parse_heading
 
 
-csv_import_class = class_read_csv.Read_CSV_Data()
+csv_import_class = class_read_csv.ReadCSVData()
 
 # Random
 today_date = datetime.today().strftime("%d-%m-%Y").replace("-", "")
