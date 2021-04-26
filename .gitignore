@@ -3,3 +3,6 @@ venv/
 .log
 .docx
 .txt
+.idea
+
+__pycache__
